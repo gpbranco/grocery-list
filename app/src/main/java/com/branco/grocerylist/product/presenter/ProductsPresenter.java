@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.branco.grocerylist.R;
+import com.branco.grocerylist.cart.interactor.CartInteractor;
 import com.branco.grocerylist.common.model.Product;
 import com.branco.grocerylist.product.interactor.ProductsInteractor;
 import com.branco.grocerylist.product.ui.ProductsView;
@@ -11,7 +12,6 @@ import com.branco.grocerylist.product.ui.ProductsView;
 import java.util.List;
 
 import rx.Subscriber;
-import rx.Subscription;
 import rx.functions.Action0;
 import rx.subscriptions.CompositeSubscription;
 
@@ -23,15 +23,24 @@ public class ProductsPresenter {
 
     private static final String TAG = ProductsPresenter.class.getSimpleName();
 
-    private ProductsView producsView;
+    private ProductsView productsView;
     private ProductsInteractor productsInteractor;
+    private CartInteractor cartInteractor;
     private CompositeSubscription subscriptions = new CompositeSubscription();
     private Context context;
 
-    public ProductsPresenter(ProductsView producsView, ProductsInteractor productsInteractor, Context context) {
-        this.producsView = producsView;
+    public ProductsPresenter(
+        ProductsInteractor productsInteractor,
+        CartInteractor cartInteractor,
+        Context context) {
+
         this.productsInteractor = productsInteractor;
+        this.cartInteractor = cartInteractor;
         this.context = context;
+    }
+
+    public void attach(ProductsView productsView) {
+      this.productsView = productsView;
     }
 
     public void loadProducts() {
@@ -40,35 +49,42 @@ public class ProductsPresenter {
                 .doOnSubscribe(new Action0() {
                   @Override
                   public void call() {
-                    producsView.showLoading();
+                    productsView.showLoading();
                   }
                 })
                 .subscribe(new Subscriber<List<Product>>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "loadProducts.onCompleted");
-                        producsView.hideLoading();
+                        productsView.hideLoading();
                     }
 
                     @Override
                     public void onError(Throwable error) {
                         Log.e(TAG, "loadProducts.onError", error);
-                        producsView.hideLoading();
-                        producsView.showErrorMessage(context.getString(R.string.load_products_error_message));
+                        productsView.hideLoading();
+                        productsView.showErrorMessage(context.getString(R.string.load_products_error_message));
                     }
 
                     @Override
                     public void onNext(List<Product> products) {
                         Log.d(TAG, "loadProducts.onNext");
-                        producsView.showProducts(products);
+                        productsView.showProducts(products);
                     }
                 }));
     }
 
+
+
     public void detach() {
+      productsView = null;
       if (subscriptions == null || subscriptions.isUnsubscribed()) {
         return;
       }
       subscriptions.unsubscribe();
     }
+
+  public void clicked(Product product) {
+    cartInteractor.addProduct(product);
+  }
 }

@@ -1,5 +1,6 @@
 package com.branco.grocerylist.product.presenter;
 
+import com.branco.grocerylist.cart.interactor.CartInteractor;
 import com.branco.grocerylist.common.model.Product;
 import com.branco.grocerylist.product.interactor.ProductsInteractor;
 import com.branco.grocerylist.product.ui.ProductsView;
@@ -33,12 +34,17 @@ public class ProductsPresenterTest {
     @Mock
     Context context;
 
+    @Mock
+    CartInteractor cartInteractor;
+
     ProductsPresenter productsPresenter;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        productsPresenter = new ProductsPresenter(producsView, productsInteractor, context);
+        productsPresenter = new ProductsPresenter(productsInteractor,
+            cartInteractor, context);
+        productsPresenter.attach(producsView);
     }
 
     @Test
