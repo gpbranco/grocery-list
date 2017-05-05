@@ -72,11 +72,8 @@ public class CartInteractor {
         subject.onNext(new Cart(cartManager.getProducts(), cartManager.getTotal()));
     }
 
-    public void removeProduct(Product product) {
-        if (product == null) {
-            return;
-        }
-        cartManager.removeProduct(product.getId());
+    public void removeProduct(int productId) {
+        cartManager.removeProduct(productId);
         subject.onNext(new Cart(cartManager.getProducts(), cartManager.getTotal()));
     }
 }

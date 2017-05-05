@@ -65,7 +65,7 @@ public class CartInteractorTest {
                 .subscribe(testSubscriber);
 
         cartInteractor.addProduct(product);
-        cartInteractor.removeProduct(product);
+        cartInteractor.removeProduct(product.getId());
 
         testSubscriber.assertValueCount(2);
     }
