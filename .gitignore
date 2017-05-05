@@ -39,6 +39,6 @@ captures/
 needs.
 .gradle
 build/
-
+.DS_Store
 # Keystore files
 *.jks
