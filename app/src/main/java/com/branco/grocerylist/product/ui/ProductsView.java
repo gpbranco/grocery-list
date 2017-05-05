@@ -9,7 +9,12 @@ import java.util.List;
  */
 
 public interface ProductsView {
+
+    void showLoading();
+
     void hideLoading();
 
     void showProducts(List<Product> products);
+
+    void showErrorMessage(String errorMessage);
 }
