@@ -36,7 +36,7 @@ public class SelectedProductRecyclerViewAdapter extends RecyclerView.Adapter<Sel
   @Override
   public void onBindViewHolder(final ViewHolder holder, int position) {
     holder.item = selectedProducts.get(position);
-    holder.name.setText(String.valueOf(selectedProducts.get(position).getId()));
+    holder.name.setText(selectedProducts.get(position).getName());
     holder.total.setText(selectedProducts.get(position).getTotal().toString());
 
     holder.view.setOnClickListener(new View.OnClickListener() {

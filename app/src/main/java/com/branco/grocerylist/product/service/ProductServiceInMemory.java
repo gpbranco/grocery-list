@@ -17,7 +17,10 @@ public class ProductServiceInMemory implements ProductService {
 
   private List<Product> products() {
     List<Product> products = new ArrayList<>();
-    products.add(new Product(1, "Eggs", new BigDecimal(2.10)));
+    products.add(new Product(1, "Peas", new BigDecimal(0.95)));
+    products.add(new Product(2, "Eggs", new BigDecimal(2.10)));
+    products.add(new Product(3, "Beans", new BigDecimal(0.73)));
+    products.add(new Product(4, "Milk", new BigDecimal(1.40)));
     return products;
   }
 }

@@ -4,7 +4,9 @@ import com.branco.grocerylist.cart.interactor.CartInteractor;
 import com.branco.grocerylist.cart.model.Cart;
 import com.branco.grocerylist.cart.model.ProductCounter;
 import com.branco.grocerylist.cart.ui.CartView;
+import com.google.gson.Gson;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import rx.Subscriber;
@@ -61,5 +63,23 @@ public class CartPresenter {
 
   public void clicked(ProductCounter toBeRemoved) {
       cartInteractor.removeProduct(toBeRemoved.getId());
+  }
+
+  public void restoreState(String json) {
+    if (json == null || json.isEmpty()) {
+      return;
+    }
+    Cart cart = new Gson().fromJson(json, Cart.class);
+    if (cart == null) {
+      return;
+    }
+    cartInteractor.setCurrentState(cart);
+    cartView.showProducts(cart.getProductCounterList());
+    cartView.showCartTotal(cart);
+  }
+
+  public void storeState(Bundle outState) {
+    String json = new Gson().toJson(cartInteractor.getCurrentState());
+    outState.putString("key", json);
   }
 }

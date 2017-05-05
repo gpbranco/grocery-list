@@ -57,4 +57,14 @@ public class CartManager {
         }
         return total;
     }
+
+    public void reset(List<ProductCounter> products) {
+        this.products = null;
+        for (ProductCounter counter : products) {
+            Product product = counter.convertToProduct();
+            for (int i = 1; i <= counter.getCount(); i++){
+                addProduct(product);
+            }
+        }
+    }
 }

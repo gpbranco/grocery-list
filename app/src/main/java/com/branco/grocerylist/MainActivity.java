@@ -28,7 +28,8 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ProductFragment.ProductsPresenterProvider,
+    SelectedProductFragment.CartPresenterProvider {
 
     @Inject
     CartPresenter cartPresenter;
@@ -83,6 +84,16 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public CartPresenter getCartPresenter() {
+        return cartPresenter;
+    }
+
+    @Override
+    public ProductsPresenter getProductsPresenter() {
+        return productsPresenter;
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -113,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            textView.setText("");
             return rootView;
         }
     }
@@ -153,11 +164,11 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return getString(R.string.product_section_title);
                 case 1:
-                    return "SECTION 2";
+                    return getString(R.string.cart_section_title);
                 case 2:
-                    return "SECTION 3";
+                    return getString(R.string.checkout_section_title);
             }
             return null;
         }

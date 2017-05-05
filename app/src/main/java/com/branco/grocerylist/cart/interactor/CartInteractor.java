@@ -27,6 +27,7 @@ public class CartInteractor {
     private PublishSubject<Cart> subject = PublishSubject.create();
     private Scheduler subscribeOn;
     private Scheduler observeOn;
+    private Cart currentState;
 
     public CartInteractor(CartManager cartManager, UserSettingsRepository userSettingsRepository, Calculator calculator, Scheduler subscribeOn, Scheduler observeOn) {
         this.cartManager = cartManager;
@@ -69,11 +70,22 @@ public class CartInteractor {
             return;
         }
         cartManager.addProduct(product);
-        subject.onNext(new Cart(cartManager.getProducts(), cartManager.getTotal()));
+        currentState = new Cart(cartManager.getProducts(), cartManager.getTotal());
+        subject.onNext(currentState);
     }
 
     public void removeProduct(int productId) {
         cartManager.removeProduct(productId);
-        subject.onNext(new Cart(cartManager.getProducts(), cartManager.getTotal()));
+        currentState = new Cart(cartManager.getProducts(), cartManager.getTotal());
+        subject.onNext(currentState);
     }
+
+  public Cart getCurrentState() {
+    return currentState;
+  }
+
+  public void setCurrentState(Cart currentState) {
+    this.currentState = currentState;
+    this.cartManager.reset(currentState.getProductCounterList());
+  }
 }

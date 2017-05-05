@@ -12,6 +12,7 @@ public class ProductCounter {
 
     private int id;
     private int count;
+    private String name;
     private BigDecimal price;
     private BigDecimal total;
 
@@ -21,6 +22,7 @@ public class ProductCounter {
         }
         this.id = product.getId();
         this.price = product.getPrice();
+        this.name = product.getName();
         total = new BigDecimal(0);
     }
 
@@ -48,5 +50,13 @@ public class ProductCounter {
 
     public BigDecimal getTotal() {
         return total;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Product convertToProduct() {
+        return new Product(id, name, price);
     }
 }

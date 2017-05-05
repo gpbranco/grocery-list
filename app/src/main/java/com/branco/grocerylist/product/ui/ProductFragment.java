@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.branco.grocerylist.R;
+import com.branco.grocerylist.checkout.ui.CheckoutFragment;
 import com.branco.grocerylist.common.model.Product;
 import com.branco.grocerylist.product.presenter.ProductsPresenter;
 
@@ -32,10 +33,10 @@ public class ProductFragment extends Fragment
   private RecyclerView list;
   private TextView error;
   private ProgressBar progressBar;
+  private ProductsPresenterProvider provider;
 
   public static ProductFragment newInstance(ProductsPresenter productsPresenter) {
     ProductFragment fragment = new ProductFragment();
-    fragment.presenter = productsPresenter;
     return fragment;
   }
 
@@ -68,8 +69,14 @@ public class ProductFragment extends Fragment
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  public void onAttach(Context context) {
+    super.onAttach(context);
+    if (context instanceof ProductsPresenterProvider) {
+      provider = ((ProductsPresenterProvider) context);
+    } else {
+      throw new RuntimeException(context.toString()
+          + " must implement ProductsPresenterProvider");
+    }
   }
 
   @Override
@@ -89,6 +96,7 @@ public class ProductFragment extends Fragment
   @Override
   public void onResume() {
     super.onResume();
+    presenter = provider.getProductsPresenter();
     presenter.attach(this);
     presenter.loadProducts();
   }
@@ -103,5 +111,9 @@ public class ProductFragment extends Fragment
   public void onClick(Product product) {
     Toast.makeText(getContext(), "clicked: " + product.getName(), Toast.LENGTH_SHORT).show();
     presenter.clicked(product);
+  }
+
+  public interface ProductsPresenterProvider {
+    ProductsPresenter getProductsPresenter();
   }
 }

@@ -22,10 +22,11 @@ public class SelectedProductFragment extends Fragment implements
   private CartPresenter cartPresenter;
   private RecyclerView list;
   private SelectedProductRecyclerViewAdapter adapter;
+  private String savedCartState;
+  private CartPresenterProvider presenterProvider;
 
   public static SelectedProductFragment newInstance(CartPresenter cartPresenter) {
     SelectedProductFragment fragment = new SelectedProductFragment();
-    fragment.cartPresenter = cartPresenter;
     return fragment;
   }
 
@@ -48,6 +49,21 @@ public class SelectedProductFragment extends Fragment implements
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    if (savedInstanceState == null) {
+      return;
+    }
+    savedCartState = savedInstanceState.getString("key");
+  }
+
+  @Override
+  public void onAttach(Context context) {
+    super.onAttach(context);
+    if (context instanceof CartPresenterProvider) {
+      presenterProvider = ((CartPresenterProvider) context);
+    } else {
+      throw new RuntimeException(context.toString()
+          + " must implement CartPresenterProvider");
+    }
   }
 
   @Override
@@ -67,12 +83,24 @@ public class SelectedProductFragment extends Fragment implements
   @Override
   public void onResume() {
     super.onResume();
+    cartPresenter = presenterProvider.getCartPresenter();
     cartPresenter.attach(this);
+    cartPresenter.restoreState(savedCartState);
   }
 
   @Override
   public void onStop() {
     super.onStop();
     cartPresenter.detach();
+  }
+
+  @Override
+  public void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    cartPresenter.storeState(outState);
+  }
+
+  public interface CartPresenterProvider {
+    CartPresenter getCartPresenter();
   }
 }
