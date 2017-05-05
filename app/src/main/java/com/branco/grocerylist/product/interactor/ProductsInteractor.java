@@ -28,10 +28,10 @@ public class ProductsInteractor {
 
     public ProductsInteractor(ProductService productService, UserSettingsRepository userSettingsRepository, Calculator calculator, Scheduler subscribeOn, Scheduler observeOn) {
         this.productService = productService;
-        this.subscribeOn = subscribeOn;
-        this.observeOn = observeOn;
         this.userSettingsRepository = userSettingsRepository;
         this.calculator = calculator;
+        this.subscribeOn = subscribeOn;
+        this.observeOn = observeOn;
     }
 
     public Observable<List<Product>> loadProducts() {

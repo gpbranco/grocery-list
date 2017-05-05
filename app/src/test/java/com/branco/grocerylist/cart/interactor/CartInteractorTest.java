@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import java.math.BigDecimal;
 
 import rx.observers.TestSubscriber;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by guilhermebranco on 5/4/17.
@@ -33,7 +34,12 @@ public class CartInteractorTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         BDDMockito.given(userSettingsRepository.getCurrentExchangeRate()).willReturn(new ExchangeRate("", BigDecimal.ZERO));
-        cartInteractor = new CartInteractor(new CartManager(), userSettingsRepository, new Calculator());
+        cartInteractor = new CartInteractor(
+            new CartManager(),
+            userSettingsRepository,
+            new Calculator(),
+            Schedulers.immediate(),
+            Schedulers.immediate());
         testSubscriber = new TestSubscriber<>();
     }
 

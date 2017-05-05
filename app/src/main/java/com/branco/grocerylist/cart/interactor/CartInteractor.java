@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import rx.Observable;
+import rx.Scheduler;
 import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
@@ -24,11 +25,15 @@ public class CartInteractor {
     private UserSettingsRepository userSettingsRepository;
     private Calculator calculator;
     private PublishSubject<Cart> subject = PublishSubject.create();
+    private Scheduler subscribeOn;
+    private Scheduler observeOn;
 
-    public CartInteractor(CartManager cartManager, UserSettingsRepository userSettingsRepository, Calculator calculator) {
+    public CartInteractor(CartManager cartManager, UserSettingsRepository userSettingsRepository, Calculator calculator, Scheduler subscribeOn, Scheduler observeOn) {
         this.cartManager = cartManager;
         this.userSettingsRepository = userSettingsRepository;
         this.calculator = calculator;
+        this.subscribeOn = subscribeOn;
+        this.observeOn = observeOn;
     }
 
     public Observable<Cart> cartUpdatedObservable() {
@@ -54,7 +59,9 @@ public class CartInteractor {
                                     }
                                 });
                     }
-                });
+                })
+                .subscribeOn(subscribeOn)
+                .observeOn(observeOn);
     }
 
     public void addProduct(Product product) {
