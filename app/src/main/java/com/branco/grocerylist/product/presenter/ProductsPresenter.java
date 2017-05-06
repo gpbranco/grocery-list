@@ -11,12 +11,11 @@ import com.branco.grocerylist.product.ui.ProductsView;
 import com.branco.grocerylist.product.ui.model.ProductViewData;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
@@ -32,7 +31,7 @@ public class ProductsPresenter {
     private ProductsView productsView;
     private ProductsInteractor productsInteractor;
     private CartInteractor cartInteractor;
-    private CompositeSubscription subscriptions = new CompositeSubscription();
+    private Subscription subscription;
     private Context context;
     private DecimalFormat formatter = new DecimalFormat("#0.00");
 
@@ -51,27 +50,28 @@ public class ProductsPresenter {
     }
 
     public void loadProducts() {
-        subscriptions.add(productsInteractor
+        unsubscribe();
+        subscription = productsInteractor
                 .loadProducts()
                 .flatMap(new Func1<List<Product>, Observable<List<ProductViewData>>>() {
-                  @Override
-                  public Observable<List<ProductViewData>> call(List<Product> products) {
-                    return Observable
-                        .from(products)
-                        .map(new Func1<Product, ProductViewData>() {
-                          @Override
-                          public ProductViewData call(Product product) {
-                            return new ProductViewData(product, formatter);
-                          }
-                        })
-                        .toList();
-                  }
+                    @Override
+                    public Observable<List<ProductViewData>> call(List<Product> products) {
+                        return Observable
+                                .from(products)
+                                .map(new Func1<Product, ProductViewData>() {
+                                    @Override
+                                    public ProductViewData call(Product product) {
+                                        return new ProductViewData(product, formatter);
+                                    }
+                                })
+                                .toList();
+                    }
                 })
                 .doOnSubscribe(new Action0() {
-                  @Override
-                  public void call() {
-                    productsView.showLoading();
-                  }
+                    @Override
+                    public void call() {
+                        productsView.showLoading();
+                    }
                 })
                 .subscribe(new Subscriber<List<ProductViewData>>() {
                     @Override
@@ -84,7 +84,7 @@ public class ProductsPresenter {
                     public void onError(Throwable error) {
                         Log.e(TAG, "loadProducts.onError", error);
                         productsView.hideLoading();
-                        productsView.showErrorMessage(context.getString(R.string.load_products_error_message));
+                        productsView.showErrorMessage(context.getString(R.string.generic_error_message));
                     }
 
                     @Override
@@ -92,20 +92,25 @@ public class ProductsPresenter {
                         Log.d(TAG, "loadProducts.onNext");
                         productsView.showProducts(products);
                     }
-                }));
+                });
     }
 
 
 
     public void detach() {
       productsView = null;
-      if (subscriptions == null || subscriptions.isUnsubscribed()) {
-        return;
-      }
-      subscriptions.unsubscribe();
+      unsubscribe();
     }
 
-  public void clicked(ProductViewData product) {
+    private void unsubscribe() {
+        if (subscription == null) {
+            return;
+        }
+        subscription.unsubscribe();
+        subscription = null;
+    }
+
+    public void clicked(ProductViewData product) {
     cartInteractor.addProduct(product.getProduct());
   }
 }

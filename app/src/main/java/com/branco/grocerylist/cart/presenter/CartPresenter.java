@@ -65,15 +65,17 @@ public class CartPresenter {
 
   public void attach(CartView cartView) {
     this.cartView = cartView;
+    subscriptions = new CompositeSubscription();
     subscriptions.add(subscribeToCartUpdates());
   }
 
   public void detach() {
     cartView = null;
-    if (subscriptions == null || subscriptions.isUnsubscribed()) {
+    if (subscriptions == null) {
       return;
     }
     subscriptions.unsubscribe();
+    subscriptions = null;
   }
 
   public void clicked(ProductCounter toBeRemoved) {
