@@ -8,20 +8,21 @@ import android.widget.TextView;
 
 import com.branco.grocerylist.R;
 import com.branco.grocerylist.cart.model.ProductCounter;
+import com.branco.grocerylist.cart.ui.model.SelectedProductViewData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SelectedProductRecyclerViewAdapter extends RecyclerView.Adapter<SelectedProductRecyclerViewAdapter.ViewHolder> {
 
-  private List<ProductCounter> selectedProducts = new ArrayList<>();
+  private List<SelectedProductViewData> selectedProducts = new ArrayList<>();
   private final OnItemClickListener listener;
 
   public SelectedProductRecyclerViewAdapter(OnItemClickListener listener) {
     this.listener = listener;
   }
 
-  public void setSelectedProducts(List<ProductCounter> selectedProducts) {
+  public void setSelectedProducts(List<SelectedProductViewData> selectedProducts) {
     this.selectedProducts.clear();
     this.selectedProducts.addAll(selectedProducts);
   }
@@ -36,8 +37,8 @@ public class SelectedProductRecyclerViewAdapter extends RecyclerView.Adapter<Sel
   @Override
   public void onBindViewHolder(final ViewHolder holder, int position) {
     holder.item = selectedProducts.get(position);
-    holder.name.setText(selectedProducts.get(position).getName());
-    holder.total.setText(selectedProducts.get(position).getTotal().toString());
+    holder.name.setText(selectedProducts.get(position).getProduct().getName());
+    holder.total.setText(selectedProducts.get(position).getTotal());
 
     holder.view.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -58,7 +59,7 @@ public class SelectedProductRecyclerViewAdapter extends RecyclerView.Adapter<Sel
     public final View view;
     public final TextView name;
     public final TextView total;
-    public ProductCounter item;
+    public SelectedProductViewData item;
 
     public ViewHolder(View view) {
       super(view);
@@ -74,6 +75,6 @@ public class SelectedProductRecyclerViewAdapter extends RecyclerView.Adapter<Sel
   }
 
   public interface OnItemClickListener {
-    void onClick(ProductCounter product);
+    void onClick(SelectedProductViewData product);
   }
 }

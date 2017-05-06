@@ -4,9 +4,11 @@ import com.branco.grocerylist.cart.interactor.CartInteractor;
 import com.branco.grocerylist.common.model.Product;
 import com.branco.grocerylist.product.interactor.ProductsInteractor;
 import com.branco.grocerylist.product.ui.ProductsView;
+import com.branco.grocerylist.product.ui.model.ProductViewData;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -56,7 +58,7 @@ public class ProductsPresenterTest {
 
         verify(producsView).showLoading();
         verify(producsView).hideLoading();
-        verify(producsView).showProducts(products);
+        verify(producsView).showProducts(ArgumentMatchers.<ProductViewData>anyList());
     }
 
     @Test

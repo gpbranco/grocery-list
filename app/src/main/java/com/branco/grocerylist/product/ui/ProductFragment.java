@@ -18,6 +18,7 @@ import com.branco.grocerylist.R;
 import com.branco.grocerylist.checkout.ui.CheckoutFragment;
 import com.branco.grocerylist.common.model.Product;
 import com.branco.grocerylist.product.presenter.ProductsPresenter;
+import com.branco.grocerylist.product.ui.model.ProductViewData;
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class ProductFragment extends Fragment
   }
 
   @Override
-  public void showProducts(List<Product> products) {
+  public void showProducts(List<ProductViewData> products) {
     adapter.setProducts(products);
     adapter.notifyDataSetChanged();
   }
@@ -108,8 +109,10 @@ public class ProductFragment extends Fragment
   }
 
   @Override
-  public void onClick(Product product) {
-    Toast.makeText(getContext(), "clicked: " + product.getName(), Toast.LENGTH_SHORT).show();
+  public void onClick(ProductViewData product) {
+    Toast.makeText(getContext(), "Added to cart: " + product.getProduct().getName(), Toast
+        .LENGTH_SHORT)
+        .show();
     presenter.clicked(product);
   }
 

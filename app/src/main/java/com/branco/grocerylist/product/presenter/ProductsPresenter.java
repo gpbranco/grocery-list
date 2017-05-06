@@ -8,11 +8,17 @@ import com.branco.grocerylist.cart.interactor.CartInteractor;
 import com.branco.grocerylist.common.model.Product;
 import com.branco.grocerylist.product.interactor.ProductsInteractor;
 import com.branco.grocerylist.product.ui.ProductsView;
+import com.branco.grocerylist.product.ui.model.ProductViewData;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action0;
+import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -28,6 +34,7 @@ public class ProductsPresenter {
     private CartInteractor cartInteractor;
     private CompositeSubscription subscriptions = new CompositeSubscription();
     private Context context;
+    private DecimalFormat formatter = new DecimalFormat("#0.00");
 
     public ProductsPresenter(
         ProductsInteractor productsInteractor,
@@ -46,13 +53,27 @@ public class ProductsPresenter {
     public void loadProducts() {
         subscriptions.add(productsInteractor
                 .loadProducts()
+                .flatMap(new Func1<List<Product>, Observable<List<ProductViewData>>>() {
+                  @Override
+                  public Observable<List<ProductViewData>> call(List<Product> products) {
+                    return Observable
+                        .from(products)
+                        .map(new Func1<Product, ProductViewData>() {
+                          @Override
+                          public ProductViewData call(Product product) {
+                            return new ProductViewData(product, formatter);
+                          }
+                        })
+                        .toList();
+                  }
+                })
                 .doOnSubscribe(new Action0() {
                   @Override
                   public void call() {
                     productsView.showLoading();
                   }
                 })
-                .subscribe(new Subscriber<List<Product>>() {
+                .subscribe(new Subscriber<List<ProductViewData>>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "loadProducts.onCompleted");
@@ -67,7 +88,7 @@ public class ProductsPresenter {
                     }
 
                     @Override
-                    public void onNext(List<Product> products) {
+                    public void onNext(List<ProductViewData> products) {
                         Log.d(TAG, "loadProducts.onNext");
                         productsView.showProducts(products);
                     }
@@ -84,7 +105,7 @@ public class ProductsPresenter {
       subscriptions.unsubscribe();
     }
 
-  public void clicked(Product product) {
-    cartInteractor.addProduct(product);
+  public void clicked(ProductViewData product) {
+    cartInteractor.addProduct(product.getProduct());
   }
 }

@@ -8,20 +8,21 @@ import android.widget.TextView;
 
 import com.branco.grocerylist.R;
 import com.branco.grocerylist.common.model.Product;
+import com.branco.grocerylist.product.ui.model.ProductViewData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecyclerViewAdapter.ViewHolder> {
 
-  private final List<Product> products = new ArrayList<>();
+  private final List<ProductViewData> products = new ArrayList<>();
   private final OnItemClickListener listener;
 
   public ProductRecyclerViewAdapter(OnItemClickListener listener) {
     this.listener = listener;
   }
 
-  public void setProducts(List<Product> products) {
+  public void setProducts(List<ProductViewData> products) {
     this.products.clear();
     this.products.addAll(products);
   }
@@ -36,8 +37,8 @@ public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecy
   @Override
   public void onBindViewHolder(final ViewHolder holder, int position) {
     holder.item = products.get(position);
-    holder.name.setText(products.get(position).getName());
-    holder.price.setText(products.get(position).getPrice().toString());
+    holder.name.setText(products.get(position).getProduct().getName());
+    holder.price.setText(products.get(position).getPrice());
 
     holder.view.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -58,13 +59,13 @@ public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecy
     public final View view;
     public final TextView name;
     public final TextView price;
-    public Product item;
+    public ProductViewData item;
 
     public ViewHolder(View view) {
       super(view);
       this.view = view;
-      name = (TextView) view.findViewById(R.id.id);
-      price = (TextView) view.findViewById(R.id.content);
+      name = (TextView) view.findViewById(R.id.name);
+      price = (TextView) view.findViewById(R.id.price);
     }
 
     @Override
@@ -74,6 +75,6 @@ public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecy
   }
 
   public interface OnItemClickListener {
-    void onClick(Product product);
+    void onClick(ProductViewData product);
   }
 }

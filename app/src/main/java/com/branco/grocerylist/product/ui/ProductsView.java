@@ -1,6 +1,6 @@
 package com.branco.grocerylist.product.ui;
 
-import com.branco.grocerylist.common.model.Product;
+import com.branco.grocerylist.product.ui.model.ProductViewData;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface ProductsView {
 
     void hideLoading();
 
-    void showProducts(List<Product> products);
+    void showProducts(List<ProductViewData> products);
 
     void showErrorMessage(String errorMessage);
 }

@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.branco.grocerylist.R;
-import com.branco.grocerylist.cart.model.Cart;
-import com.branco.grocerylist.cart.model.ProductCounter;
 import com.branco.grocerylist.cart.presenter.CartPresenter;
+import com.branco.grocerylist.cart.ui.model.CartViewData;
+import com.branco.grocerylist.cart.ui.model.SelectedProductViewData;
 
 import java.util.List;
 
@@ -31,18 +31,18 @@ public class SelectedProductFragment extends Fragment implements
   }
 
   @Override
-  public void onClick(ProductCounter product) {
-    cartPresenter.clicked(product);
+  public void onClick(SelectedProductViewData product) {
+    cartPresenter.clicked(product.getProduct());
   }
 
   @Override
-  public void showProducts(List<ProductCounter> selectedProducts) {
+  public void showProducts(List<SelectedProductViewData> selectedProducts) {
     adapter.setSelectedProducts(selectedProducts);
     adapter.notifyDataSetChanged();
   }
 
   @Override
-  public void showCartTotal(Cart cart) {
+  public void showCartTotal(CartViewData cart) {
 
   }
 
@@ -52,7 +52,7 @@ public class SelectedProductFragment extends Fragment implements
     if (savedInstanceState == null) {
       return;
     }
-    savedCartState = savedInstanceState.getString("key");
+    savedCartState = savedInstanceState.getString(CartPresenter.CART_STATE_KEY);
   }
 
   @Override

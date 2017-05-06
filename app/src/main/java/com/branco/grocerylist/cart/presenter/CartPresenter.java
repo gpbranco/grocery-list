@@ -4,6 +4,8 @@ import com.branco.grocerylist.cart.interactor.CartInteractor;
 import com.branco.grocerylist.cart.model.Cart;
 import com.branco.grocerylist.cart.model.ProductCounter;
 import com.branco.grocerylist.cart.ui.CartView;
+import com.branco.grocerylist.cart.ui.model.CartViewData;
+import com.branco.grocerylist.cart.ui.model.SelectedProductViewData;
 import com.google.gson.Gson;
 
 import android.os.Bundle;
@@ -11,24 +13,37 @@ import android.util.Log;
 
 import rx.Subscriber;
 import rx.Subscription;
+import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
+
+import java.text.DecimalFormat;
+import java.util.List;
 
 public class CartPresenter {
 
   private static final String TAG = CartPresenter.class.getSimpleName();
+  public static final String CART_STATE_KEY = "com.branco.grocerylist.cart.presenter.cart_state_key";
 
   private CartInteractor cartInteractor;
   private CartView cartView;
+  private DecimalFormat formatter;
   private CompositeSubscription subscriptions = new CompositeSubscription();
 
   public CartPresenter(CartInteractor cartInteractor) {
     this.cartInteractor = cartInteractor;
+    formatter = new DecimalFormat("#0.00");
   }
 
   private Subscription subscribeToCartUpdates() {
     return this.cartInteractor
         .cartUpdatedObservable()
-        .subscribe(new Subscriber<Cart>() {
+        .map(new Func1<Cart, CartViewData>() {
+          @Override
+          public CartViewData call(Cart cart) {
+            return new CartViewData(cart, formatter);
+          }
+        })
+        .subscribe(new Subscriber<CartViewData>() {
           @Override
           public void onCompleted() {
             Log.d(TAG, "cartUpdatedObservable.onCompleted");
@@ -40,9 +55,9 @@ public class CartPresenter {
           }
 
           @Override
-          public void onNext(Cart cart) {
+          public void onNext(CartViewData cart) {
             Log.d(TAG, "cartUpdatedObservable.onNext");
-            cartView.showProducts(cart.getProductCounterList());
+            cartView.showProducts(cart.getSelectedProduct());
             cartView.showCartTotal(cart);
           }
         });
@@ -74,12 +89,13 @@ public class CartPresenter {
       return;
     }
     cartInteractor.setCurrentState(cart);
-    cartView.showProducts(cart.getProductCounterList());
-    cartView.showCartTotal(cart);
+    CartViewData cartViewData = new CartViewData(cart, formatter);
+    cartView.showProducts(cartViewData.getSelectedProduct());
+    cartView.showCartTotal(cartViewData);
   }
 
   public void storeState(Bundle outState) {
     String json = new Gson().toJson(cartInteractor.getCurrentState());
-    outState.putString("key", json);
+    outState.putString(CART_STATE_KEY, json);
   }
 }
