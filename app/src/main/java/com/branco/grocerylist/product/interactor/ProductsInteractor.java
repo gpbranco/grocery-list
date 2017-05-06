@@ -57,7 +57,7 @@ public class ProductsInteractor {
             public Product call(Product product) {
                 BigDecimal rate = userSettingsRepository.getCurrentExchangeRate().getRate();
                 BigDecimal exchanged = calculator.exchange(product.getPrice(), rate);
-                return new Product(product.getId(), product.getName(), exchanged);
+                return new Product(product.getId(), product.getName(), product.getUnit(), exchanged);
             }
         };
     }

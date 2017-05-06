@@ -45,8 +45,8 @@ public class CartInteractorTest {
 
     @Test
     public void shouldNotifyObserversWhenProductAdded() {
-        Product one = new Product(1, "", BigDecimal.ONE);
-        Product two = new Product(2, "", BigDecimal.ONE);
+        Product one = new Product(1, "", "", BigDecimal.ONE);
+        Product two = new Product(2, "", "", BigDecimal.ONE);
         cartInteractor
                 .cartUpdatedObservable()
                 .subscribe(testSubscriber);
@@ -59,7 +59,7 @@ public class CartInteractorTest {
 
     @Test
     public void shouldNotifyObserversWhenProductRemoved() {
-        Product product = new Product(1, "", BigDecimal.ONE);
+        Product product = new Product(1, "", "", BigDecimal.ONE);
         cartInteractor
                 .cartUpdatedObservable()
                 .subscribe(testSubscriber);

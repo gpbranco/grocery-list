@@ -3,7 +3,6 @@ package com.branco.grocerylist.cart.manager;
 import com.branco.grocerylist.cart.model.ProductCounter;
 import com.branco.grocerylist.common.model.Product;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,8 +30,8 @@ public class CartManagerTest {
 
     @Test
     public void shouldAddProduct() {
-        Product one = new Product(1, "", BigDecimal.ONE);
-        Product two = new Product(2, "", BigDecimal.ONE);
+        Product one = new Product(1, "", "", BigDecimal.ONE);
+        Product two = new Product(2, "", "", BigDecimal.ONE);
         cartManager.addProduct(one);
         cartManager.addProduct(two);
         List<ProductCounter> products = cartManager.getProducts();
@@ -42,7 +41,7 @@ public class CartManagerTest {
     @Test
     public void shouldRemoveProduct() {
         int id = 1;
-        Product product = new Product(id, "", BigDecimal.ONE);
+        Product product = new Product(id, "", "", BigDecimal.ONE);
         cartManager.addProduct(product);
         cartManager.addProduct(product);
         cartManager.addProduct(product);
@@ -53,7 +52,7 @@ public class CartManagerTest {
 
     @Test
     public void shouldCountProduct() {
-        Product product = new Product(1, "", BigDecimal.ONE);
+        Product product = new Product(1, "", "", BigDecimal.ONE);
         cartManager.addProduct(product);
         cartManager.addProduct(product);
         ProductCounter counter = cartManager.getProducts().get(0);
@@ -62,7 +61,7 @@ public class CartManagerTest {
 
     @Test
     public void shouldCalculateTotalForEachProductCounter() {
-        Product product = new Product(1, "", BigDecimal.ONE);
+        Product product = new Product(1, "", "", BigDecimal.ONE);
         ProductCounter counter = new ProductCounter(product);
         counter.add();
         counter.add();
@@ -74,8 +73,8 @@ public class CartManagerTest {
 
     @Test
     public void shouldCalculateTotalForAllProducts() {
-        Product one = new Product(1, "", new BigDecimal(10));
-        Product two = new Product(2, "", new BigDecimal(5));
+        Product one = new Product(1, "", "", new BigDecimal(10));
+        Product two = new Product(2, "", "", new BigDecimal(5));
         cartManager.addProduct(one);
         cartManager.addProduct(one);
         cartManager.addProduct(one);
