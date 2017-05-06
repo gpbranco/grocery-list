@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.branco.grocerylist.R;
-import com.branco.grocerylist.cart.model.ProductCounter;
 import com.branco.grocerylist.cart.ui.model.SelectedProductViewData;
 
 import java.util.ArrayList;
@@ -39,6 +38,8 @@ public class SelectedProductRecyclerViewAdapter extends RecyclerView.Adapter<Sel
     holder.item = selectedProducts.get(position);
     holder.name.setText(selectedProducts.get(position).getProduct().getName());
     holder.total.setText(selectedProducts.get(position).getTotal());
+    holder.unit.setText(selectedProducts.get(position).getProduct().getUnit());
+    holder.count.setText(selectedProducts.get(position).getCount());
 
     holder.view.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -59,6 +60,8 @@ public class SelectedProductRecyclerViewAdapter extends RecyclerView.Adapter<Sel
     public final View view;
     public final TextView name;
     public final TextView total;
+    public final TextView unit;
+    public final TextView count;
     public SelectedProductViewData item;
 
     public ViewHolder(View view) {
@@ -66,6 +69,8 @@ public class SelectedProductRecyclerViewAdapter extends RecyclerView.Adapter<Sel
       this.view = view;
       name = (TextView) view.findViewById(R.id.name);
       total = (TextView) view.findViewById(R.id.total);
+      unit = (TextView) view.findViewById(R.id.unit);
+      count = (TextView) view.findViewById(R.id.count);
     }
 
     @Override

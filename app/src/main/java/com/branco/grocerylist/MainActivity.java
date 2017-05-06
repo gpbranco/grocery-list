@@ -143,9 +143,9 @@ public class MainActivity extends AppCompatActivity implements ProductFragment.P
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return ProductFragment.newInstance(productsPresenter);
+                    return ProductFragment.newInstance();
                 case 1:
-                    return SelectedProductFragment.newInstance(cartPresenter);
+                    return SelectedProductFragment.newInstance();
                 /*case 2:
                     return "SECTION 3";*/
             }

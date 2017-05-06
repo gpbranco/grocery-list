@@ -36,7 +36,7 @@ public class ProductFragment extends Fragment
   private ProgressBar progressBar;
   private ProductsPresenterProvider provider;
 
-  public static ProductFragment newInstance(ProductsPresenter productsPresenter) {
+  public static ProductFragment newInstance() {
     ProductFragment fragment = new ProductFragment();
     return fragment;
   }
@@ -78,6 +78,12 @@ public class ProductFragment extends Fragment
       throw new RuntimeException(context.toString()
           + " must implement ProductsPresenterProvider");
     }
+  }
+
+  @Override
+  public void onDetach() {
+    super.onDetach();
+    provider = null;
   }
 
   @Override

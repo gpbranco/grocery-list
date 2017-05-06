@@ -25,7 +25,7 @@ public class SelectedProductFragment extends Fragment implements
   private String savedCartState;
   private CartPresenterProvider presenterProvider;
 
-  public static SelectedProductFragment newInstance(CartPresenter cartPresenter) {
+  public static SelectedProductFragment newInstance() {
     SelectedProductFragment fragment = new SelectedProductFragment();
     return fragment;
   }
@@ -64,6 +64,12 @@ public class SelectedProductFragment extends Fragment implements
       throw new RuntimeException(context.toString()
           + " must implement CartPresenterProvider");
     }
+  }
+
+  @Override
+  public void onDetach() {
+    super.onDetach();
+    presenterProvider = null;
   }
 
   @Override

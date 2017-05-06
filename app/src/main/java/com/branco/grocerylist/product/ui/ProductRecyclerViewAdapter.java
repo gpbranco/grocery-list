@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.branco.grocerylist.R;
-import com.branco.grocerylist.common.model.Product;
 import com.branco.grocerylist.product.ui.model.ProductViewData;
 
 import java.util.ArrayList;
@@ -38,6 +37,7 @@ public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecy
   public void onBindViewHolder(final ViewHolder holder, int position) {
     holder.item = products.get(position);
     holder.name.setText(products.get(position).getProduct().getName());
+    holder.unit.setText(products.get(position).getProduct().getUnit());
     holder.price.setText(products.get(position).getPrice());
 
     holder.view.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +58,7 @@ public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecy
   public class ViewHolder extends RecyclerView.ViewHolder {
     public final View view;
     public final TextView name;
+    public final TextView unit;
     public final TextView price;
     public ProductViewData item;
 
@@ -65,6 +66,7 @@ public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecy
       super(view);
       this.view = view;
       name = (TextView) view.findViewById(R.id.name);
+      unit = (TextView) view.findViewById(R.id.unit);
       price = (TextView) view.findViewById(R.id.price);
     }
 

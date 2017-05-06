@@ -7,24 +7,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.branco.grocerylist.R;
-import com.branco.grocerylist.checkout.ui.CheckoutFragment.OnListFragmentInteractionListener;
-import com.branco.grocerylist.checkout.ui.dummy.DummyContent.DummyItem;
+import com.branco.grocerylist.cart.model.Cart;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
-public class MyCheckoutRecyclerViewAdapter extends RecyclerView.Adapter<MyCheckoutRecyclerViewAdapter.ViewHolder> {
+public class CheckoutRecyclerViewAdapter extends RecyclerView.Adapter<CheckoutRecyclerViewAdapter.ViewHolder> {
 
-  private final List<DummyItem> mValues;
-  private final OnListFragmentInteractionListener mListener;
+  private List<Cart> carts;
+  private final OnItemClickListener listener;
 
-  public MyCheckoutRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-    mValues = items;
-    mListener = listener;
+  public CheckoutRecyclerViewAdapter(OnItemClickListener listener) {
+    this.listener = listener;
   }
 
   @Override
@@ -36,7 +29,7 @@ public class MyCheckoutRecyclerViewAdapter extends RecyclerView.Adapter<MyChecko
 
   @Override
   public void onBindViewHolder(final ViewHolder holder, int position) {
-    holder.mItem = mValues.get(position);
+    /*holder.mItem = mValues.get(position);
     holder.mIdView.setText(mValues.get(position).id);
     holder.mContentView.setText(mValues.get(position).content);
 
@@ -49,23 +42,23 @@ public class MyCheckoutRecyclerViewAdapter extends RecyclerView.Adapter<MyChecko
           mListener.onListFragmentInteraction(holder.mItem);
         }
       }
-    });
+    });*/
   }
 
   @Override
   public int getItemCount() {
-    return mValues.size();
+    return carts.size();
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
-    public final View mView;
+    public final View view;
     public final TextView mIdView;
     public final TextView mContentView;
-    public DummyItem mItem;
+    public Cart item;
 
     public ViewHolder(View view) {
       super(view);
-      mView = view;
+      this.view = view;
       mIdView = (TextView) view.findViewById(R.id.id);
       mContentView = (TextView) view.findViewById(R.id.content);
     }
@@ -74,5 +67,9 @@ public class MyCheckoutRecyclerViewAdapter extends RecyclerView.Adapter<MyChecko
     public String toString() {
       return super.toString() + " '" + mContentView.getText() + "'";
     }
+  }
+
+  public interface OnItemClickListener {
+    void onClick(Cart item);
   }
 }
