@@ -1,4 +1,3 @@
-# grocery-list
 Grocery List
 ===================
 Easy way to shop. Provides the ability of checking the price of goods in different currencies.
