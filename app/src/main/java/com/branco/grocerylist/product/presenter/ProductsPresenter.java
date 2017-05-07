@@ -95,8 +95,6 @@ public class ProductsPresenter {
                 });
     }
 
-
-
     public void detach() {
       productsView = null;
       unsubscribe();

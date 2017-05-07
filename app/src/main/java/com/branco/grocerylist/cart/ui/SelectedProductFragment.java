@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.branco.grocerylist.R;
 import com.branco.grocerylist.cart.presenter.CartPresenter;
@@ -24,6 +26,9 @@ public class SelectedProductFragment extends Fragment implements
   private SelectedProductRecyclerViewAdapter adapter;
   private String savedCartState;
   private CartPresenterProvider presenterProvider;
+  private TextView total;
+  private TextView currency;
+  private Button changeCurrencyButton;
 
   public static SelectedProductFragment newInstance() {
     SelectedProductFragment fragment = new SelectedProductFragment();
@@ -43,7 +48,8 @@ public class SelectedProductFragment extends Fragment implements
 
   @Override
   public void showCartTotal(CartViewData cart) {
-
+    total.setText(cart.getTotal());
+    currency.setText(cart.getCurrency());
   }
 
   @Override
@@ -82,6 +88,11 @@ public class SelectedProductFragment extends Fragment implements
     list.setLayoutManager(new LinearLayoutManager(context));
     adapter = new SelectedProductRecyclerViewAdapter(this);
     list.setAdapter(adapter);
+
+    total = (TextView) view.findViewById(R.id.total);
+    currency = (TextView) view.findViewById(R.id.currency);
+    changeCurrencyButton = (Button) view.findViewById(R.id.changeCurrencyBtn);
+
 
     return view;
   }

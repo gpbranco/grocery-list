@@ -4,6 +4,7 @@ import com.branco.grocerylist.cart.manager.Calculator;
 import com.branco.grocerylist.cart.manager.CartManager;
 import com.branco.grocerylist.cart.model.Cart;
 import com.branco.grocerylist.cart.model.ProductCounter;
+import com.branco.grocerylist.common.model.ExchangeRate;
 import com.branco.grocerylist.common.model.Product;
 import com.branco.grocerylist.common.repository.UserSettingsRepository;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import rx.Observable;
 import rx.Scheduler;
 import rx.functions.Func1;
+import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 
 /**
@@ -24,7 +26,7 @@ public class CartInteractor {
     private final CartManager cartManager;
     private UserSettingsRepository userSettingsRepository;
     private Calculator calculator;
-    private PublishSubject<Cart> subject = PublishSubject.create();
+    private BehaviorSubject<Cart> subject = BehaviorSubject.create();
     private Scheduler subscribeOn;
     private Scheduler observeOn;
     private Cart currentState;
@@ -49,6 +51,13 @@ public class CartInteractor {
                                     @Override
                                     public ProductCounter call(ProductCounter productCounter) {
                                         return productCounter;
+                                    }
+                                })
+                                .map(new Func1<ProductCounter, ProductCounter>() {
+                                    @Override
+                                    public ProductCounter call(ProductCounter productCounter) {
+                                        BigDecimal exchanged = calculator.exchange(productCounter.getTotal(), userSettingsRepository.getCurrentExchangeRate().getRate());
+                                        return productCounter.convertedTotal(exchanged);
                                     }
                                 })
                                 .toList()
@@ -80,12 +89,19 @@ public class CartInteractor {
         subject.onNext(currentState);
     }
 
-  public Cart getCurrentState() {
-    return currentState;
-  }
+    public Cart getCurrentState() {
+        return currentState;
+    }
 
-  public void setCurrentState(Cart currentState) {
-    this.currentState = currentState;
-    this.cartManager.reset(currentState.getProductCounterList());
-  }
+    public void setCurrentState(Cart currentState) {
+        this.currentState = currentState;
+        this.cartManager.reset(currentState.getProductCounterList());
+    }
+
+    public void reload() {
+        if (currentState == null){
+            return;
+        }
+        subject.onNext(currentState);
+    }
 }

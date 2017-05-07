@@ -4,6 +4,10 @@
     <string name="product_section_title">Products</string>
     <string name="cart_section_title">Cart</string>
     <string name="checkout_section_title">Checkouts</string>
+    <string name="available_currencies_title">Currencies</string>
 
-    <string name="load_products_error_message">Connection error. Please check your connection and try again.</string>
+    <string name="change_button_text">Change</string>
+    <string name="checkout_button_text">Checkout</string>
+
+    <string name="generic_error_message">Connection error. Please check your connection and try again.</string>
 </resources>

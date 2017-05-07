@@ -11,10 +11,12 @@ public class CartViewData {
 
   private Cart cart;
   private DecimalFormat formatter;
+  private String currency;
 
-  public CartViewData(Cart cart, DecimalFormat formatter) {
+  public CartViewData(Cart cart, DecimalFormat formatter, String currency) {
     this.cart = cart;
     this.formatter = formatter;
+    this.currency = currency;
   }
 
   public Cart getCart() {
@@ -25,7 +27,11 @@ public class CartViewData {
     return formatter.format(cart.getTotal());
   }
 
-  public List<SelectedProductViewData> getSelectedProduct() {
+  public String getCurrency() {
+    return currency;
+  }
+
+  public List<SelectedProductViewData> getSelectedProducts() {
     List<SelectedProductViewData> products = new ArrayList<>();
     for (ProductCounter counter: cart.getProductCounterList()) {
       products.add(new SelectedProductViewData(counter, formatter));

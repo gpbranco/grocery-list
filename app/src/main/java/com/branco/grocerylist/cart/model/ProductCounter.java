@@ -28,6 +28,22 @@ public class ProductCounter {
         this.total = new BigDecimal(0);
     }
 
+    public ProductCounter convertedTotal(BigDecimal convertedTotal) {
+        return new ProductCounter(this, convertedTotal);
+    }
+
+    private ProductCounter(ProductCounter productCounter, BigDecimal convertedTotal) {
+        if (productCounter == null) {
+            throw new IllegalStateException("ProductCounter must not be null!");
+        }
+        this.id = productCounter.getId();
+        this.price = productCounter.getPrice();
+        this.name = productCounter.getName();
+        this.unit = productCounter.getUnit();
+        this.count = productCounter.getCount();
+        this.total = convertedTotal;
+    }
+
     public int getId() {
         return id;
     }

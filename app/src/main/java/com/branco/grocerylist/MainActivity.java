@@ -8,7 +8,9 @@ import com.branco.grocerylist.home.di.HomeModule;
 import com.branco.grocerylist.product.di.ProductsModule;
 import com.branco.grocerylist.product.presenter.ProductsPresenter;
 import com.branco.grocerylist.product.ui.ProductFragment;
+import com.branco.grocerylist.settings.ui.SettingsActivity;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -78,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements ProductFragment.P
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 

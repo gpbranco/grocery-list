@@ -15,16 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.branco.grocerylist.R;
-import com.branco.grocerylist.checkout.ui.CheckoutFragment;
-import com.branco.grocerylist.common.model.Product;
 import com.branco.grocerylist.product.presenter.ProductsPresenter;
 import com.branco.grocerylist.product.ui.model.ProductViewData;
 
 import java.util.List;
 
-/**
- * A fragment representing a list of {@link com.branco.grocerylist.common.model.Product}.
- */
 public class ProductFragment extends Fragment
     implements ProductRecyclerViewAdapter.OnItemClickListener, ProductsView {
 
